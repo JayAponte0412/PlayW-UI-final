@@ -1,10 +1,9 @@
 import { test, expect } from "@playwright/test";
+const saucedemo = "https://www.saucedemo.com/";
 
 test("Login", async ({ page }) => {
   //Go to the following page
-  await page.goto("https://www.saucedemo.com/");
-  //Adding a pause to open in headed mode to see the test in action and locate the fields
-//   await page.pause();
+  await page.goto(saucedemo);
   //with locator found the username field and will fill it with the username selected below
   await page.locator('[data-test="username"]').fill("problem_user");
   //with locator found the password field and will fill it with the password selected below
@@ -12,22 +11,22 @@ test("Login", async ({ page }) => {
   //with locator found the Login Button and will use .click to click on it
     await page.locator('[data-test="login-button"]').click();
     //Validate we are in the Swag Labs page
-    await expect(page.getByText('Swag Labs'), 'Swag Labs').toBeVisible()
+  await expect(page.getByText('Swag Labs'), 'Swag Labs').toBeVisible()
+  await page.close();
 });
 
 
 
 
 test("positive test", async ({ page }) => {
-  await page.goto("https://www.saucedemo.com/");
+  await page.goto(saucedemo);
   //with locator found the username field and will fill it with the username selected below
   await page.locator('[data-test="username"]').fill("problem_user");
   //with locator found the password field and will fill it with the password selected below
   await page.locator('[data-test="password"]').fill("secret_sauce");
   //with locator found the Login Button and will use .click to click on it
   await page.locator('[data-test="login-button"]').click();
-  //adding page.pause to stay on browser and verify steps one at a time
-  await page.pause();
+  //verify you are in swag labs main page by validating title 
   await expect(page.getByText('Swag Labs'), 'Swag Labs').toBeVisible()
   //now add one item to cart by clicking on the first add to cart button
   await page.locator('[data-test="add-to-cart-sauce-labs-backpack"]').click();
@@ -36,50 +35,45 @@ test("positive test", async ({ page }) => {
   //validate button is clickable/ enabled to checkout
   // await page.locator('[data-test="checkout"]').click();
   await expect(page.locator('[data-test="checkout"]')).toBeEnabled();
+  await page.close();
 });
 
 
 
 
 test("negative test", async ({ page }) => {
-    await page.goto("https://www.saucedemo.com/");
+    await page.goto(saucedemo);
     //with locator found the username field and will fill it with the username selected below
     await page.locator('[data-test="username"]').fill("problem_user");
     //with locator found the password field and will fill it with the password selected below
     await page.locator('[data-test="password"]').fill("secret_sauce");
     //with locator found the Login Button and will use .click to click on it
     await page.locator('[data-test="login-button"]').click();
-    //adding page.pause to stay on browser and verify steps one at a time
-    await page.pause();
-
     //validate the title of the page you logged in to 
     await expect(page.getByText('Swag Labs'), 'Swag Labs').toBeVisible()
-
     //now add one item to cart by clicking on the first add to cart button
     await page.locator('[data-test="add-to-cart-sauce-labs-backpack"]').click();
     //click on remove button and verify the item does not remove 
     await page.locator('[data-test="remove-sauce-labs-backpack"]').click()
     // expect the button to NOT Change back to 'Add to Cart when clicked due to bug
-    await expect('Remove').toBe('Remove')
+  await expect('Remove').toBe('Remove')
+  await page.close();
 });
   
 
 
 
 test("validate error message extra test 1", async ({ page }) => {
-  await page.goto("https://www.saucedemo.com/");
+  await page.goto(saucedemo);
   //with locator found the username field and will fill it with the username selected below
   await page.locator('[data-test="username"]').fill("standard_user");
   //with locator found the password field and will fill it with the password selected below
   await page.locator('[data-test="password"]').fill("secret_sauce");
   //with locator found the Login Button and will use .click to click on it
   await page.locator('[data-test="login-button"]').click();
-  await page.pause() 
-
   //validate the login page, by confirming the title of the page
   const title = page.locator('[data-test="title"]');
   await expect(title).toHaveText('Products')
-
   //select item to go into item page 
   await page.locator('[data-test="item-4-title-link"]').click()
   //in the item page click add to cart button 
@@ -98,25 +92,24 @@ test("validate error message extra test 1", async ({ page }) => {
   await page.locator('[data-test="continue"]').click()
   //validate expect error 'Error: Las Name is required'
   await expect(page.locator('[data-test="error"]')).toContainText('Error: Last Name is required')
+  await page.close();
 });
 
 
 
 
-test.only("verify item name extra test 2", async ({ page }) => {
-  await page.goto("https://www.saucedemo.com/");
+test("verify item name extra test 2", async ({ page }) => {
+  await page.goto(saucedemo);
   //with locator found the username field and will fill it with the username selected below
   await page.locator('[data-test="username"]').fill("problem_user");
   //with locator found the password field and will fill it with the password selected below
   await page.locator('[data-test="password"]').fill("secret_sauce");
   //with locator found the Login Button and will use .click to click on it
   await page.locator('[data-test="login-button"]').click();
-  //adding page.pause to stay on browser and verify steps one at a time
-  await page.pause();
   //click on the sauce labs backpack item
   await page.click('[data-test="item-4-title-link"]')
-  //expect the item name to be Sauce labs backpack 
-  await expect(page.locator('[data-test="inventory-item-name"]')).toHaveText("Sauce Labs Backpack");
+  //expect the item name to be the incorrect item of Sauce Labs Fleece Jacket
+  await expect(page.locator('[data-test="inventory-item-name"]')).toHaveText("Sauce Labs Fleece Jacket");
   //Test Should Error as it is validating a current bug where the item names dont match
   await page.close()
  
@@ -125,17 +118,14 @@ test.only("verify item name extra test 2", async ({ page }) => {
 
 
 
-
 test("verify number of options in dropdown test 3", async ({ page }) => {
-  await page.goto("https://www.saucedemo.com/");
+  await page.goto(saucedemo);
   //with locator found the username field and will fill it with the username selected below
   await page.locator('[data-test="username"]').fill("problem_user");
   //with locator found the password field and will fill it with the password selected below
   await page.locator('[data-test="password"]').fill("secret_sauce");
   //with locator found the Login Button and will use .click to click on it
   await page.locator('[data-test="login-button"]').click();
-  //adding page.pause to stay on browser and verify steps one at a time
-  await page.pause();
   //use xpath to find filter dropdown options element
   const options = await page.locator(".product_sort_container, option");
   // verify the amount on elements in the drop down
@@ -148,15 +138,13 @@ test("verify number of options in dropdown test 3", async ({ page }) => {
 
 
 test("end 2 end test", async ({ page }) => {
-  await page.goto("https://www.saucedemo.com/");
+  await page.goto(saucedemo);
   //with locator found the username field and will fill it with the username selected below
   await page.locator('[data-test="username"]').fill("standard_user");
   //with locator found the password field and will fill it with the password selected below
   await page.locator('[data-test="password"]').fill("secret_sauce");
   //with locator found the Login Button and will use .click to click on it
   await page.locator('[data-test="login-button"]').click();
-  //adding page.pause to stay on browser and verify steps one at a time
-  await page.pause();
   //add all items to cart
   await page.click('[data-test="add-to-cart-sauce-labs-backpack"]');
   await page.click('[data-test="add-to-cart-sauce-labs-bike-light"]');
