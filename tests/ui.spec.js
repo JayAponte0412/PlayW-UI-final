@@ -98,7 +98,7 @@ test("validate error message extra test 1", async ({ page }) => {
 
 
 
-test.only("verify item name extra test 2", async ({ page }) => {
+test("verify item name extra test 2", async ({ page }) => {
   await page.goto(saucedemo);
   //with locator found the username field and will fill it with the username selected below
   await page.locator('[data-test="username"]').fill("problem_user");
